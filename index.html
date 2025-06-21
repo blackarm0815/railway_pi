@@ -18,8 +18,13 @@ body {
   height: 310px;
   width: 770px;
 }
-.button {
-  background-color: #745858;
+.buttonOn {
+  background-color: #e78d8d;
+  position: absolute;
+  font-size: 200%;
+}
+.buttonOff {
+  background-color: #745858; 
   position: absolute;
   font-size: 200%;
 }
@@ -123,34 +128,59 @@ body {
 <input type="range" id="slider3" class="slider" value="0" min="0" max="255">
 <input type="range" id="slider4" class="slider" value="0" min="0" max="255">
 <input type="range" id="slider5" class="slider" value="0" min="0" max="255">
-<button id="button0" class="button">Sig</button>
-<button id="button1" class="button">Sig</button>
-<button id="button2" class="button">Estop</button>
-<button id="button3" class="button">&lt;</button>
-<button id="button4" class="button">&gt;</button>
-<button id="button5" class="button">Sh</button>
-<button id="button6" class="button">W</button>
-<button id="button7" class="button">&lt;</button>
-<button id="button8" class="button">&gt;</button>
-<button id="button9" class="button">w</button>
+<button id="button0" class="buttonOff">Sig</button>
+<button id="button1" class="buttonOff">Sig</button>
+<button id="button2" class="buttonOff">Estop</button>
+<button id="button3" class="buttonOff">&lt;</button>
+<button id="button4" class="buttonOff">&gt;</button>
+<button id="button5" class="buttonOff">Sh</button>
+<button id="button6" class="buttonOff">W</button>
+<button id="button7" class="buttonOff">&lt;</button>
+<button id="button8" class="buttonOff">&gt;</button>
+<button id="button9" class="buttonOff">w</button>
 
 <script>
         
 // this is a global variable containing the raspberry pi ip address
 const serverIpAddress = '192.168.1.112';
+// booleans to remember the state of a button
+let isButton2On = false;
 
-const changeslider0 = () => {
+const changeButton2 = () => {
+  //
+  const button2 = document.getElementById('button2');
+  let url = '';
+  //
+  if (button2 !== null) {
+    // change the state of the boolean and the class
+    if (isButton2On) {
+      button2.className = 'buttonOff';
+      isButton2On = false;
+      url = `http://${serverIpAddress}:8000/pin4?onOff=off`;
+    } else {
+      button2.className = 'buttonOn';
+      isButton2On = true;
+      url = `http://${serverIpAddress}:8000/pin4?onOff=on`;
+    }
+    fetch(url)
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data)
+    })
+    .catch(console.error);
+  }
+};
 
+
+
+const changeSlider0 = () => {
   // find the slider
   const slider0 = document.getElementById('slider0');
   if (slider0 !== null) {
-
     // get the current value of the slider
     const sliderValue = 255 - slider0.value;
-
     // create a url for pin 17 using the slider value
     const url = `http://${serverIpAddress}:8000/pin17?pwm=${sliderValue}`;
-
     // fetch the url from the api
     fetch(url)
     .then((response) => response.json())
@@ -159,12 +189,12 @@ const changeslider0 = () => {
     })
     .catch(console.error);
   }
-  
 };
 
 const main = () => {
   // add eventlisteners to html elements
-  document.getElementById('slider0').addEventListener('input', changeslider0);
+  document.getElementById('button2').addEventListener('click', changeButton2);
+  document.getElementById('slider0').addEventListener('input', changeSlider0);
 };
 
 main();
