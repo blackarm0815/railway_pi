@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<!-- saved from url=(0066)file:///media/user/4ABD-2014/N%20Gauge%20via%20API/grandad%203.htm -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta content="utf-8" http-equiv="encoding">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="viewport" content="initial-scale = 1.0, user-scalable = no">
+<title>grandad</title>
+<style>
+
+body {
+  position: fixed;
+  overflow: hidden;
+}
+#background {
+  background-color: #8c8cbb;
+  position: absolute;
+  height: 310px;
+  width: 770px;
+}
+.button {
+  background-color: #745858;
+  position: absolute;
+  font-size: 200%;
+}
+#button0 {
+  height: 50px;
+  left: 300px;
+  top: 30px;
+  width: 60px;
+}
+#button1 {
+  height: 50px;
+  left: 410px;
+  top: 110px;
+  width: 60px;
+}
+#button2 {
+  height: 100px;
+  left: 338px;
+  top: 200px;
+  width: 100px;
+}
+#button3 {
+  height: 50px;
+  left: 50px;
+  top: 250px;
+  width: 50px;
+}
+#button4 {
+  height: 50px;
+  left: 147px;
+  top: 250px;
+  width: 50px;
+}
+#button5 {
+  height: 50px;
+  left: 258px;
+  top: 250px;
+  width: 50px;
+}
+#button6 {
+  height: 50px;
+  left: 450px;
+  top: 250px;
+  width: 50px;
+}
+#button7 {
+  height: 50px;
+  left: 576px;
+  top: 250px;
+  width: 50px;
+}
+#button8 {
+  height: 50px;
+  left: 668px;
+  top: 250px;
+  width: 50px;
+}
+#button9 {
+  height: 40px;
+  left: 510px;
+  top: 260px;
+  width: 40px;
+}
+#slider0 {
+  left: -20px;
+}
+#slider1 {
+  left: 40px;
+}
+#slider2 {
+  left: 100px;
+}
+#slider3 {
+  left: 250px;
+}
+#slider4 {
+  left: 310px;
+}
+#slider5 {
+  left: 366px;
+}
+.slider {
+  position: absolute;
+  -webkit-transform: rotate(270deg);
+  -moz-transform: rotate(270deg);
+  -ms-transform: rotate(270deg);
+  -o-transform: rotate(270deg);
+  transform: rotate(270deg);
+  zoom: 160%;
+  top: 70px;
+}
+
+</style>
+</head>
+<body>
+
+<div id="background"></div>
+<input type="range" id="slider0" class="slider" value="0" min="0" max="255">
+<input type="range" id="slider1" class="slider" value="0" min="0" max="255">
+<input type="range" id="slider2" class="slider" value="0" min="0" max="255">
+<input type="range" id="slider3" class="slider" value="0" min="0" max="255">
+<input type="range" id="slider4" class="slider" value="0" min="0" max="255">
+<input type="range" id="slider5" class="slider" value="0" min="0" max="255">
+<button id="button0" class="button">Sig</button>
+<button id="button1" class="button">Sig</button>
+<button id="button2" class="button">Estop</button>
+<button id="button3" class="button">&lt;</button>
+<button id="button4" class="button">&gt;</button>
+<button id="button5" class="button">Sh</button>
+<button id="button6" class="button">W</button>
+<button id="button7" class="button">&lt;</button>
+<button id="button8" class="button">&gt;</button>
+<button id="button9" class="button">w</button>
+
+<script>
+        
+// this is a global variable containing the raspberry pi ip address
+const serverIpAddress = '192.168.1.112';
+
+const changeslider0 = () => {
+
+  // find the slider
+  const slider0 = document.getElementById('slider0');
+  if (slider0 !== null) {
+
+    // get the current value of the slider
+    const sliderValue = 255 - slider0.value;
+
+    // create a url for pin 17 using the slider value
+    const url = `http://${serverIpAddress}:8000/pin17?pwm=${sliderValue}`;
+
+    // fetch the url from the api
+    fetch(url)
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data)
+    })
+    .catch(console.error);
+  }
+  
+};
+
+const main = () => {
+  // add eventlisteners to html elements
+  document.getElementById('slider0').addEventListener('input', changeslider0);
+};
+
+main();
+
+</script>
+
+</body></html>
