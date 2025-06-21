@@ -10,36 +10,36 @@ const pin4 = new Gpio(4, {mode: Gpio.OUTPUT});
 const pin17 = new Gpio(17, {mode: Gpio.OUTPUT});
 
 
-// this listens for messages for pin 17
+// this listens for messages for pin 4
 app.get('/pin4', (req, res) => {
   //
-  let onOff = 0;
-  let response = {};
+  let onOff = '';
   //
   if (Object.prototype.hasOwnProperty.call(req.query, 'onOff')) {
     onOff = req.query['onOff'];
-    if (onOff = 'on') {
-      pin4.pwmWrite(1);
+    if (onOff == 'on') {
+      pin4.digitalWrite(1);
     } else {
-      pin4.pwmWrite(0);
+      pin4.digitalWrite(0);
     }
-    response = {'pin4': onOff};
   }
-  res.json(response);
+  // response to be shown in the browser console
+  res.json({'pin4': onOff});
 });
 
 // this listens for messages for pin 17
 app.get('/pin17', (req, res) => {
   //
   let pwmValue = 0;
-  let response = {};
   //
   if (Object.prototype.hasOwnProperty.call(req.query, 'pwm')) {
     pwmValue = req.query['pwm'];
+    // set pwm value of pin
+    // subtract from 255 to invert
     pin17.pwmWrite(255 - pwmValue);
-    response = {'pin17': pwmValue};
   }
-  res.json(response);
+  // response to be shown in the browser console
+  res.json({'pin17': pwmValue});
 });
 
 
